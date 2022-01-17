@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "681064250075",
+    "project_id": "stonkreviews",
+    "storage_bucket": "stonkreviews.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:681064250075:android:33ad271f5deb2e93bceafe",
+        "android_client_info": {
+          "package_name": "one.id0.stockreviews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "681064250075-erv524jco5a3bsugpqdaopd1f24b2nh6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHwtCRx3Q5ezMBnHp-LWxqQu5-X7UoP6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "681064250075-erv524jco5a3bsugpqdaopd1f24b2nh6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
