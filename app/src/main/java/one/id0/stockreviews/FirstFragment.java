@@ -29,7 +29,7 @@ public class FirstFragment extends Fragment {
         View msiView = msi.onCreateView(inflater, container, savedInstanceState);
         binding.stonkView.addView(msiView);
         msiView.setOnClickListener(v->{
-            ((MainActivity)getActivity()).setViewingReviews(true);
+            ((MainActivity)getActivity()).setStockBeingViewed("AAPL");
             Log.println(Log.VERBOSE, "CLICKED", "CLICKED");
             NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_firstFragment_to_viewReviewsFragment, msi.getParams());
         });

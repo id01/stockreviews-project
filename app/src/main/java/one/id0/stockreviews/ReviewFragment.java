@@ -1,6 +1,7 @@
 package one.id0.stockreviews;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,11 @@ public class ReviewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        owner = savedInstanceState.getString("owner");
+        content = savedInstanceState.getString("content");
+        rating = savedInstanceState.getFloat("rating");
+        date = savedInstanceState.getLong("date");
     }
 
     @Override
@@ -49,7 +55,12 @@ public class ReviewFragment extends Fragment {
 
         binding = FragmentReviewBinding.inflate(inflater, container, false);
 
+        binding.titleText.setText("Review Title");
+        binding.authorText.setText(owner);
+        binding.reviewText.setText(content);
+        binding.ratingBar.setRating(rating);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_view_reviews, container, false);
+        return binding.getRoot();
     }
 }

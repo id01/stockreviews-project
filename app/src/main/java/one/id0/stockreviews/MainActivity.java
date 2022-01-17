@@ -20,6 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MenuItem signInButton;
 
-    private boolean viewingReviews;
+    private String stockBeingViewed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,23 +68,46 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        binding.fab.setOnClickListener(v->{
-            if (viewingReviews) {
-                // Add reviews
+        stockBeingViewed = null;
 
+        ActivityResultLauncher<Intent> reviewAddLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), uri->{
+            int resultCode = uri.getResultCode();
+            String data = uri.getData().getDataString();
+            int firstSpace = data.indexOf(' ');
+            Review review = new Review(user.getUid(), data.substring(firstSpace+1), Integer.parseInt(data.substring(0, firstSpace)), System.currentTimeMillis());
+            Log.v(TAG, review.toString());
+            db.collection(stockBeingViewed).document(user.getUid()).set(review.toMap()).addOnSuccessListener(aVoid->{
+                Snackbar.make(binding.getRoot(), "Review added!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }).addOnFailureListener(aVoid->{
+                Snackbar.make(binding.getRoot(), "Review add failed!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            });
+            db.collection("Cities");
+        });
+
+        binding.fab.setOnClickListener(v->{
+            if (stockBeingViewed != null) {
+                // Add reviews
+                if (user == null || db == null) {
+                    Snackbar.make(binding.getRoot(), "You need to sign in for that!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                } else {
+                    reviewAddLauncher.launch(new Intent(this, ReviewAddActivity.class));
+                }
             } else {
                 // Add stock to list
+                //navController.getGraph().findNode(R.id.firstFragment);
+                //getSupportFragmentManager().findFragmentById(R.id.nav_)
             }
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
         });
+
+        db = FirebaseFirestore.getInstance();
     }
 
     public void signIn() {
         user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            db = FirebaseFirestore.getInstance();
-
+        if (user == null || db == null) {
             // Choose authentication providers
             List<AuthUI.IdpConfig> providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build());
 
@@ -105,12 +129,14 @@ public class MainActivity extends AppCompatActivity {
                     if (result.getResultCode() == RESULT_OK) {
                         // Successfully signed in
                         user = FirebaseAuth.getInstance().getCurrentUser();
+                        db = FirebaseFirestore.getInstance();
                         signInButton.setTitle("Sign Out");
                     } else {
                         // Sign in failed. If response is null the user canceled the
                         // sign-in flow using the back button. Otherwise check
                         // response.getError().getErrorCode() and handle the error.
                         // ...
+                        Log.println(Log.ERROR, "APP", "SIGN IN FAILED");
                     }
                 }
             }
@@ -130,11 +156,9 @@ public class MainActivity extends AppCompatActivity {
         return db;
     }
 
-    public void setViewingReviews(boolean viewingReviews) {
-        this.viewingReviews = viewingReviews;
-        if (viewingReviews) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+    public void setStockBeingViewed(String stockBeingViewed) {
+        this.stockBeingViewed = stockBeingViewed;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(stockBeingViewed != null);
     }
 
     @Override
