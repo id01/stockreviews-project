@@ -16,6 +16,7 @@ import one.id0.stockreviews.databinding.FragmentFirstBinding;
 public class FirstFragment extends Fragment {
 
     private FragmentFirstBinding binding;
+    private MainActivity activity;
 
     @Override
     public View onCreateView(
@@ -24,15 +25,18 @@ public class FirstFragment extends Fragment {
     ) {
 
         binding = FragmentFirstBinding.inflate(inflater, container, false);
+        activity = (MainActivity)getActivity();
 
         MiniStonkInfo msi = MiniStonkInfo.newInstance("AAPL", 3.2f, 0.1f, 100.55f, 1.1f);
         View msiView = msi.onCreateView(inflater, container, savedInstanceState);
         binding.stonkView.addView(msiView);
         msiView.setOnClickListener(v->{
-            ((MainActivity)getActivity()).setStockBeingViewed("AAPL");
+            activity.setStockBeingViewed("AAPL");
             Log.println(Log.VERBOSE, "CLICKED", "CLICKED");
             NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_firstFragment_to_viewReviewsFragment, msi.getParams());
         });
+
+        activity.resetVariablesToMainPage();
 
         return binding.getRoot();
     }

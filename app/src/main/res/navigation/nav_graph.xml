@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_firstFragment_to_viewReviewsFragment"
             app:destination="@id/viewReviewsFragment" />
+        <action
+            android:id="@+id/action_firstFragment_to_addStockFragment"
+            app:destination="@id/addStockFragment" />
     </fragment>
     <fragment
         android:id="@+id/viewReviewsFragment"
@@ -20,6 +23,15 @@
         tools:layout="@layout/fragment_view_reviews" >
         <action
             android:id="@+id/action_viewReviewsFragment_to_firstFragment"
+            app:destination="@id/firstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addStockFragment"
+        android:name="one.id0.stockreviews.AddStockFragment"
+        android:label="fragment_add_stock"
+        tools:layout="@layout/fragment_add_stock" >
+        <action
+            android:id="@+id/action_addStockFragment_to_firstFragment"
             app:destination="@id/firstFragment" />
     </fragment>
 </navigation>

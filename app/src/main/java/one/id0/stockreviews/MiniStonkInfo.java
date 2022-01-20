@@ -36,7 +36,6 @@ public class MiniStonkInfo extends Fragment {
      * @param valueChange the recent change in value of the stock
      * @return A new instance of fragment mini_stonk_info.
      */
-    // TODO: Rename and change types and number of parameters
     public static MiniStonkInfo newInstance(String name, float stars, float starChange, float value, float valueChange) {
         MiniStonkInfo fragment = new MiniStonkInfo();
         fragment.setParams(name, stars, starChange, value, valueChange);

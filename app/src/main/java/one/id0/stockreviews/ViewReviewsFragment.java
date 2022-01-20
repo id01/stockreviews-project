@@ -58,7 +58,7 @@ public class ViewReviewsFragment extends Fragment {
             float value = getArguments().getFloat("Value");
             float valueChange = getArguments().getFloat("ValueChange");
             try {
-                db.collection(stockName)
+                db.collection("User/Ticker/" + stockName)
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
@@ -99,7 +99,7 @@ public class ViewReviewsFragment extends Fragment {
             float valueChange = getArguments().getFloat("ValueChange");
             FirebaseFirestore db = ((MainActivity)getActivity()).getDB();
 //            try {
-                db.collection(stockName)
+                db.collection("User/Ticker/" + stockName)
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {

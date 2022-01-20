@@ -1,6 +1,8 @@
 package one.id0.stockreviews;
 
 import static android.content.ContentValues.TAG;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -76,14 +78,13 @@ public class MainActivity extends AppCompatActivity {
             int firstSpace = data.indexOf(' ');
             Review review = new Review(user.getUid(), data.substring(firstSpace+1), Integer.parseInt(data.substring(0, firstSpace)), System.currentTimeMillis());
             Log.v(TAG, review.toString());
-            db.collection(stockBeingViewed).document(user.getUid()).set(review.toMap()).addOnSuccessListener(aVoid->{
+            db.collection("User/Ticker/" + stockBeingViewed).document(user.getUid()).set(review.toMap()).addOnSuccessListener(aVoid->{
                 Snackbar.make(binding.getRoot(), "Review added!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }).addOnFailureListener(aVoid->{
                 Snackbar.make(binding.getRoot(), "Review add failed!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             });
-            db.collection("Cities");
         });
 
         binding.fab.setOnClickListener(v->{
@@ -97,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else {
                 // Add stock to list
-                //navController.getGraph().findNode(R.id.firstFragment);
-                //getSupportFragmentManager().findFragmentById(R.id.nav_)
+                navController.navigate(R.id.action_firstFragment_to_addStockFragment);
+                binding.fab.setVisibility(GONE);
             }
         });
 
@@ -117,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
                     .setAvailableProviders(providers)
                     .build();
             signInLauncher.launch(signInIntent);
+        } else {
+            signInButton.setTitle("Sign Out");
         }
     }
 
@@ -159,6 +162,16 @@ public class MainActivity extends AppCompatActivity {
     public void setStockBeingViewed(String stockBeingViewed) {
         this.stockBeingViewed = stockBeingViewed;
         getSupportActionBar().setDisplayHomeAsUpEnabled(stockBeingViewed != null);
+    }
+
+    // Resets variables to the main page
+    public void resetVariablesToMainPage() {
+        this.stockBeingViewed = null;
+        try {
+            this.binding.fab.setVisibility(VISIBLE);
+        } catch (NullPointerException e) {
+            // Do nothing
+        }
     }
 
     @Override
