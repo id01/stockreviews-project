@@ -44,7 +44,7 @@ public class AddStockFragment extends Fragment {
         View bindingRoot = binding.getRoot();
         // When submitButton is clicked add the ticker to preferences and navigate back to the main page
         binding.submitButton.setOnClickListener(v->{
-            RxDataStore<Preferences> dataStore = new RxPreferenceDataStoreBuilder(getActivity(), "tickers").build();
+            RxDataStore<Preferences> dataStore = ((MainActivity)getActivity()).getDataStore();
             dataStore.updateDataAsync(dataIn->{
                 MutablePreferences mutablePreferences = dataIn.toMutablePreferences();
                 mutablePreferences.set(new Preferences.Key<Boolean>(binding.tickerInput.getText().toString()), true);

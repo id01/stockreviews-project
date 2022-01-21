@@ -133,7 +133,7 @@ public class ViewReviewsFragment extends Fragment {
     }
 
     public void showReviews() {
-        if (allReviews != null) {
+        if (allReviews != null && !allReviews.isEmpty()) {
             Log.v(TAG, allReviews.toString());
             for (Review review : allReviews.values()) {
                 ReviewFragment rf = ReviewFragment.newInstance(review.owner, review.content, review.rating, review.date);

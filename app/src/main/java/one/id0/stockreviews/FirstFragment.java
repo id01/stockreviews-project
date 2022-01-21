@@ -1,5 +1,6 @@
 package one.id0.stockreviews;
 
+import android.bluetooth.BluetoothClass;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,10 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.datastore.preferences.core.Preferences;
+import androidx.datastore.preferences.rxjava3.RxPreferenceDataStoreBuilder;
+import androidx.datastore.rxjava3.RxDataStore;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.navigation.fragment.NavHostFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import io.reactivex.rxjava3.core.Flowable;
 import one.id0.stockreviews.databinding.FragmentFirstBinding;
 
 public class FirstFragment extends Fragment {
@@ -27,14 +37,39 @@ public class FirstFragment extends Fragment {
         binding = FragmentFirstBinding.inflate(inflater, container, false);
         activity = (MainActivity)getActivity();
 
-        MiniStonkInfo msi = MiniStonkInfo.newInstance("AAPL", 3.2f, 0.1f, 100.55f, 1.1f);
+        RxDataStore<Preferences> dataStore = ((MainActivity)getActivity()).getDataStore();
+        Flowable<List<String>> tickerFlow = dataStore.data().map(prefs->{
+            ArrayList<String> out = new ArrayList<>();
+            for (Preferences.Key<?> key : prefs.asMap().keySet()) {
+                out.add(key.getName());
+            }
+            return out;
+        });
+        List<String> tickers = new ArrayList<>();
+        tickerFlow.forEach(tickerSet->{
+            for (String ticker : tickerSet) {
+                MiniStonkInfo msi = MiniStonkInfo.newInstance(ticker, 3.2f, 0.1f, 100.55f, 1.1f);
+                View msiView = msi.onCreateView(inflater, container, savedInstanceState);
+                msiView.setOnClickListener(v->{
+                    activity.setStockBeingViewed(ticker);
+                    NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_firstFragment_to_viewReviewsFragment, msi.getParams());
+                });
+                getActivity().runOnUiThread(()->{
+                    if (binding != null) {
+                        binding.stonkView.addView(msiView);
+                    }
+                });
+            }
+        });
+
+/*        MiniStonkInfo msi = MiniStonkInfo.newInstance("AAPL", 3.2f, 0.1f, 100.55f, 1.1f);
         View msiView = msi.onCreateView(inflater, container, savedInstanceState);
         binding.stonkView.addView(msiView);
         msiView.setOnClickListener(v->{
             activity.setStockBeingViewed("AAPL");
             Log.println(Log.VERBOSE, "CLICKED", "CLICKED");
             NavHostFragment.findNavController(FirstFragment.this).navigate(R.id.action_firstFragment_to_viewReviewsFragment, msi.getParams());
-        });
+        });*/
 
         activity.resetVariablesToMainPage();
 

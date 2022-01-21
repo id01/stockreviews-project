@@ -29,6 +29,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import androidx.datastore.preferences.core.Preferences;
+import androidx.datastore.preferences.rxjava3.RxPreferenceDataStoreBuilder;
+import androidx.datastore.rxjava3.RxDataStore;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem signInButton;
 
     private String stockBeingViewed;
+    private RxDataStore<Preferences> dataStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +176,14 @@ public class MainActivity extends AppCompatActivity {
         } catch (NullPointerException e) {
             // Do nothing
         }
+    }
+
+    // Gets datastore
+    public RxDataStore<Preferences> getDataStore() {
+        if (dataStore == null) {
+            dataStore = new RxPreferenceDataStoreBuilder(this, "tickers").build();
+        }
+        return dataStore;
     }
 
     @Override
