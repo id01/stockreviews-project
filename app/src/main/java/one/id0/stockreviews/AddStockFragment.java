@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import io.reactivex.rxjava3.core.Single;
 import one.id0.stockreviews.databinding.FragmentAddStockBinding;
 import one.id0.stockreviews.databinding.FragmentViewReviewsBinding;
@@ -45,11 +47,17 @@ public class AddStockFragment extends Fragment {
         // When submitButton is clicked add the ticker to preferences and navigate back to the main page
         binding.submitButton.setOnClickListener(v->{
             RxDataStore<Preferences> dataStore = ((MainActivity)getActivity()).getDataStore();
-            dataStore.updateDataAsync(dataIn->{
-                MutablePreferences mutablePreferences = dataIn.toMutablePreferences();
-                mutablePreferences.set(new Preferences.Key<Boolean>(binding.tickerInput.getText().toString()), true);
-                return Single.just(mutablePreferences);
-            });
+            String toAdd = binding.tickerInput.getText().toString();
+            if (toAdd.chars().allMatch(Character::isLetter)) {
+                dataStore.updateDataAsync(dataIn -> {
+                    MutablePreferences mutablePreferences = dataIn.toMutablePreferences();
+                    mutablePreferences.set(new Preferences.Key<Boolean>(toAdd.toUpperCase()), true);
+                    return Single.just(mutablePreferences);
+                });
+            } else {
+                Snackbar.make(binding.getRoot(), "Invalid ticker!", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
             Navigation.findNavController(bindingRoot).navigate(R.id.action_addStockFragment_to_firstFragment);
         });
         return bindingRoot;

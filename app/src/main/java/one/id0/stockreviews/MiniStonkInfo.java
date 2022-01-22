@@ -73,9 +73,9 @@ public class MiniStonkInfo extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentMiniStonkInfoBinding.inflate(inflater, container, false);
         binding.nameText.setText(name);
-        binding.priceText.setText(String.format("$%.2f (%.2f%%)", value, valueChange));
+//        binding.priceText.setText(String.format("$%.2f (%.2f%%)", value, valueChange));
         binding.ratingBar.setRating(stars);
-        binding.ratingChangeText.setText(String.format("(%.2f)", starChange));
+//        binding.ratingChangeText.setText(String.format("(%.2f)", starChange));
         return binding.getRoot();
     }
 }

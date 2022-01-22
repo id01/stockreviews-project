@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
-        android:layout_height="141dp"
+        android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -21,7 +21,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -43,21 +43,8 @@
                     android:numStars="5"
                     android:rating="1" />
 
-                <TextView
-                    android:id="@+id/ratingChangeText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="(-0.1)"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
             </TableRow>
 
-            <TextView
-                android:id="@+id/priceText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="$0.01 (-0.1)"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
         </LinearLayout>
 
 
